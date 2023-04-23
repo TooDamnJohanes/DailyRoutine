@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "Daily Routine"
+include ':app'
+include ':core'
+include ':features'
+include ':features:authentication'
+include ':features:authentication:public'
+include ':features:authentication:impl'
+include ':features:welcome'
+include ':features:welcome:impl'
