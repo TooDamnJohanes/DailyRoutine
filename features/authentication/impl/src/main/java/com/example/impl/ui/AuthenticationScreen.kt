@@ -45,7 +45,7 @@ import com.example.core.R
 import com.example.core.dimensions.LocalSpacing
 import com.example.core.navigation.DailyRoutineScreens
 import com.example.core.util.UiEvent
-import com.example.impl.ui.components.AlertDialog
+import com.example.impl.ui.components.AuthenticationAlertDialog
 import com.example.impl.ui.components.DailyRoutineLogo
 import com.example.impl.ui.components.EmailInput
 import com.example.impl.ui.components.PasswordInput
@@ -63,7 +63,7 @@ fun AuthenticationScreen(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-    val teste = authenticationScreenViewModel.showErrorDialog.value
+    val showErrorDialogState = authenticationScreenViewModel.showErrorDialog.value
 
     val isCreatingAccountState = authenticationScreenViewModel.isCreatingAccount
     val emailFieldState = authenticationScreenViewModel.emailFieldInput.value
@@ -123,14 +123,17 @@ fun AuthenticationScreen(
                             if (authResult) {
                                 onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HOME))
                             }
-
                         }
                     }
                 )
             }
         }
-        if (teste) {
-            AlertDialog()
+        if (showErrorDialogState) {
+            AuthenticationAlertDialog(
+                isCreatingAccount = isCreatingAccountState.value
+            ) {
+                authenticationScreenViewModel.onAuthenticationAlertDialogDismiss()
+            }
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         Row(
@@ -244,7 +247,7 @@ private fun ShowCreateAccountText() {
     Text(
         modifier = Modifier
             .padding(start = LocalSpacing.current.spaceSmall),
-        text = stringResource(id = R.string.create_acct),
+        text = stringResource(id = R.string.authenticationScreen_createAccountInfo_label),
         fontWeight = FontWeight.SemiBold,
         style = TextStyle(
             fontStyle = FontStyle.Italic

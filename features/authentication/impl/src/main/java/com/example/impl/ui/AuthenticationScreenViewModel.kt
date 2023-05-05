@@ -54,7 +54,6 @@ class AuthenticationScreenViewModel @Inject constructor(
         authenticationType: AuthenticationType,
         onAuthenticationSucceed: (Boolean) -> Unit
     ) {
-        showErrorDialog.value = false
         viewModelScope.launch {
             val isLoginValidScope =
                 withContext(Dispatchers.IO) {
@@ -69,6 +68,10 @@ class AuthenticationScreenViewModel @Inject constructor(
         }
     }
 
+    fun onAuthenticationAlertDialogDismiss() {
+        showErrorDialog.value = false
+    }
+
     private fun changeEmailFieldValue(newValue: String) {
         _emailFieldInput.value = newValue
     }
@@ -78,7 +81,21 @@ class AuthenticationScreenViewModel @Inject constructor(
     }
 
     private fun checkIfFieldsAreValid(): Boolean {
-        return _emailFieldInput.value.trim().isNotEmpty() && _passwordFieldInput.value.trim()
-            .isNotEmpty()
+        val isEmailValid = checkIfEmailInputFieldIsValid()
+        val isPasswordValid = checkIfPasswordInputFieldIsValid()
+        return isEmailValid && isPasswordValid
+    }
+
+    private fun checkIfEmailInputFieldIsValid(): Boolean {
+        val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$")
+        val emailFieldInputMatchesRegex = emailRegex.matches(_emailFieldInput.value)
+        return _emailFieldInput.value.isNotEmpty() && emailFieldInputMatchesRegex
+    }
+
+    private fun checkIfPasswordInputFieldIsValid(): Boolean {
+        return _passwordFieldInput.value.isNotEmpty() && _passwordFieldInput.value.length >= PASSWORD_MIN_LENGTH
+    }
+    companion object {
+        const val PASSWORD_MIN_LENGTH = 6
     }
 }

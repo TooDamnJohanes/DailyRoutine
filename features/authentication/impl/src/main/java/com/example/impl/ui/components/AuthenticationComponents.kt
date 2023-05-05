@@ -1,10 +1,11 @@
 package com.example.impl.ui.components
 
-import androidx.compose.material.AlertDialog
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -14,19 +15,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.core.dimensions.LocalSpacing
 import com.example.impl.ui.FieldType
+import com.example.core.R
 
 @Composable
 fun DailyRoutineLogo(
@@ -155,48 +157,53 @@ fun InputField(
 }
 
 @Composable
-fun AlertDialog() {
-    val context = LocalContext.current
-    val openDialog = remember {
-        mutableStateOf(true)
-    }
-    if(openDialog.value) {
-        AlertDialog(
-            onDismissRequest = { openDialog.value = false },
-            title = {
+fun AuthenticationAlertDialog(
+    isCreatingAccount: Boolean,
+    onDialogConfirmButton: () -> Unit
+) {
+    val alertDialogTitle = String.format(
+        stringResource(id = R.string.alertDialog_title_label),
+        if(isCreatingAccount) {
+            stringResource(id = R.string.authenticationScreen_singUp_label)
+        } else {
+            stringResource(id = R.string.authenticationScreen_login_label)
+        }
+    )
+    AlertDialog(
+        onDismissRequest = { onDialogConfirmButton() },
+        title = {
+            Text(
+                text = alertDialogTitle,
+                color = MaterialTheme.colors.error,
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Text(
+                text = stringResource(id = R.string.alertDialog_descriptionText_label),
+                color = MaterialTheme.colors.onBackground
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onDialogConfirmButton() }
+            ) {
                 Text(
-                    text = "Test Alert Dialog",
-                    color = MaterialTheme.colors.onPrimary
-                )
-            },
-            text = {
-                Text(
-                    text = "this is our Dialog",
+                    text = stringResource(R.string.alertDialog_confirmButton_label),
                     color = MaterialTheme.colors.onBackground
                 )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = { openDialog.value = false }
-                ) {
-                    Text(
-                        text = "CONFIRM BUTTON",
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                }
-            },
-            dismissButton =  {
-                TextButton(
-                    onClick = { openDialog.value = false }
-                ) {
-                    Text(
-                        text = "DISMISS BUTTON",
-                        color = MaterialTheme.colors.onError
-                    )
-                }
-            },
-            backgroundColor = Color.Green,
-            contentColor = Color.White
-        )
+            }
+        },
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.onBackground,
+        shape = RoundedCornerShape(LocalSpacing.current.spaceExtraSmall)
+    )
+}
+
+@Composable
+@Preview
+fun AlertDialogPreview() {
+    AuthenticationAlertDialog(isCreatingAccount = false) {
+
     }
 }

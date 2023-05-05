@@ -3,14 +3,12 @@ package com.example.impl.data.repository
 import android.util.Log
 import com.example.apublic.data.repository.FirebaseAuthenticationRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CompletableDeferred
 import javax.inject.Inject
 
-class FirebaseAuthenticationRepositoryImpl @Inject constructor() :
-    FirebaseAuthenticationRepository {
-    private val firebaseAuth: FirebaseAuth = Firebase.auth
+class FirebaseAuthenticationRepositoryImpl @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+) : FirebaseAuthenticationRepository {
     override suspend fun loginUserWithEmailAndPassword(email: String, password: String): Boolean {
         val isTaskSuccessful = CompletableDeferred<Boolean>()
         try {
