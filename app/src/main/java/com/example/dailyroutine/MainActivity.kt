@@ -11,9 +11,11 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.core.navigation.DailyRoutineNavigation
+import com.example.dailyroutine.navigation.DailyRoutineNavigation
 import com.example.dailyroutine.ui.theme.DailyRoutineTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
