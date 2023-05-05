@@ -5,7 +5,8 @@
 
     <!-- Region Components -->
     <string name="alertDialog_title_label">Error while trying to %s</string>
-    <string name="alertDialog_descriptionText_label">Invalid email and/or password</string>
+    <string name="alertDialog_loginDescriptionText_label">Invalid credentials</string>
+    <string name="alertDialog_singUpDescriptionText_label">E-mail already used!</string>
     <string name="alertDialog_confirmButton_label">try again.</string>
     <!-- End Region -->
 

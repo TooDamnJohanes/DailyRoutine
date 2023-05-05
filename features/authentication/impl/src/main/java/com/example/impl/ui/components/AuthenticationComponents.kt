@@ -25,10 +25,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import com.example.core.R
+import com.example.core.dimensions.LocalFontSize
 import com.example.core.dimensions.LocalSpacing
 import com.example.impl.ui.FieldType
-import com.example.core.R
 
 @Composable
 fun DailyRoutineLogo(
@@ -90,7 +90,7 @@ fun PasswordInput(
         label = { Text(text = labelId) },
         singleLine = true,
         textStyle = TextStyle(
-            fontSize = 18.sp,
+            fontSize = LocalFontSize.current.defaultLarge,
             color = MaterialTheme.colors.onBackground,
         ),
         modifier = modifier
@@ -137,7 +137,7 @@ fun InputField(
         label = { Text(text = labelId) },
         singleLine = isSingleLine,
         textStyle = TextStyle(
-            fontSize = 18.sp,
+            fontSize = LocalFontSize.current.defaultLarge,
             color = MaterialTheme.colors.onBackground
         ),
         modifier = modifier
@@ -163,7 +163,7 @@ fun AuthenticationAlertDialog(
 ) {
     val alertDialogTitle = String.format(
         stringResource(id = R.string.alertDialog_title_label),
-        if(isCreatingAccount) {
+        if (isCreatingAccount) {
             stringResource(id = R.string.authenticationScreen_singUp_label)
         } else {
             stringResource(id = R.string.authenticationScreen_login_label)
@@ -180,7 +180,11 @@ fun AuthenticationAlertDialog(
         },
         text = {
             Text(
-                text = stringResource(id = R.string.alertDialog_descriptionText_label),
+                text = if (isCreatingAccount) {
+                    stringResource(id = R.string.alertDialog_singUpDescriptionText_label)
+                } else {
+                    stringResource(id = R.string.alertDialog_loginDescriptionText_label)
+                },
                 color = MaterialTheme.colors.onBackground
             )
         },
