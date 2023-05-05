@@ -31,6 +31,7 @@ class AuthenticationScreenViewModel @Inject constructor(
     val isFieldsValid: State<Boolean> = _isFieldsValid
 
     val passwordVisibility: MutableState<Boolean> = mutableStateOf(false)
+    val showErrorDialog: MutableState<Boolean> = mutableStateOf(false)
 
     fun changeFormType() {
         _isCreatingAccount.value = !isCreatingAccount.value
@@ -53,16 +54,18 @@ class AuthenticationScreenViewModel @Inject constructor(
         authenticationType: AuthenticationType,
         onAuthenticationSucceed: (Boolean) -> Unit
     ) {
+        showErrorDialog.value = false
         viewModelScope.launch {
-            val authenticationResult =
-                withContext(Dispatchers.Default) {
+            val isLoginValidScope =
+                withContext(Dispatchers.IO) {
                     authenticateUserUseCase(
                         authenticationType = authenticationType,
                         email = _emailFieldInput.value,
                         password = _passwordFieldInput.value
                     )
                 }
-            onAuthenticationSucceed(authenticationResult)
+            showErrorDialog.value = !isLoginValidScope
+            onAuthenticationSucceed(isLoginValidScope)
         }
     }
 

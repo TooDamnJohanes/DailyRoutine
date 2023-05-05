@@ -5,37 +5,36 @@ import com.example.apublic.data.repository.FirebaseAuthenticationRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CompletableDeferred
 import javax.inject.Inject
 
 class FirebaseAuthenticationRepositoryImpl @Inject constructor() :
     FirebaseAuthenticationRepository {
     private val firebaseAuth: FirebaseAuth = Firebase.auth
     override suspend fun loginUserWithEmailAndPassword(email: String, password: String): Boolean {
-        return try {
-            var isTaskSuccessful = true
-            firebaseAuth
-                .signInWithEmailAndPassword(
-                    email,
-                    password
-                )
+        val isTaskSuccessful = CompletableDeferred<Boolean>()
+        try {
+            firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(FIREBASE_SING_IN_USER, task.result.toString())
+                        isTaskSuccessful.complete(true)
                     } else {
-                        isTaskSuccessful = task.isSuccessful
-                        Log.d(FIREBASE_SING_IN_USER_ERROR, task.result.toString())
+                        Log.d(FIREBASE_SING_IN_USER_ERROR, task.exception.toString())
+                        isTaskSuccessful.complete(false)
                     }
                 }
-            isTaskSuccessful
+            return isTaskSuccessful.await()
         } catch (t: Throwable) {
             Log.d(FIREBASE_SING_IN_USER_ERROR, t.message.toString())
-            false
+            return false
         }
     }
 
+
     override suspend fun createUserWithEmailAndPassword(email: String, password: String): Boolean {
         return try {
-            var isTaskSuccessful = true
+            val isTaskSuccessful = CompletableDeferred<Boolean>()
             firebaseAuth
                 .createUserWithEmailAndPassword(
                     email,
@@ -43,13 +42,14 @@ class FirebaseAuthenticationRepositoryImpl @Inject constructor() :
                 )
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        isTaskSuccessful.complete(true)
                         Log.d(FIREBASE_CREATE_USER, task.result.toString())
                     } else {
-                        isTaskSuccessful = task.isSuccessful
-                        Log.d(FIREBASE_CREATE_USER_ERROR, task.result.toString())
+                        isTaskSuccessful.complete(false)
+                        Log.d(FIREBASE_CREATE_USER_ERROR, task.exception.toString())
                     }
                 }
-            isTaskSuccessful
+            isTaskSuccessful.await()
         } catch (t: Throwable) {
             Log.d(FIREBASE_SING_IN_USER_ERROR, t.message.toString())
             false

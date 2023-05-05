@@ -45,6 +45,7 @@ import com.example.core.R
 import com.example.core.dimensions.LocalSpacing
 import com.example.core.navigation.DailyRoutineScreens
 import com.example.core.util.UiEvent
+import com.example.impl.ui.components.AlertDialog
 import com.example.impl.ui.components.DailyRoutineLogo
 import com.example.impl.ui.components.EmailInput
 import com.example.impl.ui.components.PasswordInput
@@ -62,6 +63,7 @@ fun AuthenticationScreen(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+    val teste = authenticationScreenViewModel.showErrorDialog.value
 
     val isCreatingAccountState = authenticationScreenViewModel.isCreatingAccount
     val emailFieldState = authenticationScreenViewModel.emailFieldInput.value
@@ -126,6 +128,9 @@ fun AuthenticationScreen(
                     }
                 )
             }
+        }
+        if (teste) {
+            AlertDialog()
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         Row(
