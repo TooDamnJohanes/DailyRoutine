@@ -87,7 +87,7 @@ class AuthenticationScreenViewModel @Inject constructor(
     }
 
     private fun checkIfEmailInputFieldIsValid(): Boolean {
-        val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$")
+        val emailRegex = Regex(EMAIL_REGEX)
         val emailFieldInputMatchesRegex = emailRegex.matches(_emailFieldInput.value)
         return _emailFieldInput.value.isNotEmpty() && emailFieldInputMatchesRegex
     }
@@ -97,5 +97,6 @@ class AuthenticationScreenViewModel @Inject constructor(
     }
     companion object {
         const val PASSWORD_MIN_LENGTH = 6
+        const val EMAIL_REGEX = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$"
     }
 }
