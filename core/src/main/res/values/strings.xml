@@ -2,4 +2,22 @@
     <string name="app_name">Daily Routine</string>
     <string name="welcomeScreen_welcomeMessage">Hello! Lets find out more about you :)</string>
     <string name="welcomeScreen_next">Next</string>
+
+    <!-- Region Components -->
+    <string name="alertDialog_title_label">Error while trying to %s</string>
+    <string name="alertDialog_loginDescriptionText_label">Invalid credentials</string>
+    <string name="alertDialog_singUpDescriptionText_label">E-mail already used!</string>
+    <string name="alertDialog_confirmButton_label">try again.</string>
+    <!-- End Region -->
+
+    <!-- Region AuthenticationScreen -->
+    <string name="authenticationScreen_createAccountInfo_label"> Please enter a valid email and password that is at least 6 characters</string>
+    <string name="authenticationScreen_newUser_label">New user?</string>
+    <string name="authenticationScreen_alreadyHaveAnAccount_label">Already have an account?</string>
+    <string name="authenticationScreen_email_label">E-mail</string>
+    <string name="authenticationScreen_password_label">Password</string>
+    <string name="authenticationScreen_createAccount_label">Create account</string>
+    <string name="authenticationScreen_login_label">Login</string>
+    <string name="authenticationScreen_singUp_label">Sing up</string>
+    <!-- End Region -->
 </resources>
