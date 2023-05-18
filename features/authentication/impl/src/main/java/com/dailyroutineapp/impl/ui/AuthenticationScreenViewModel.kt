@@ -30,7 +30,9 @@ class AuthenticationScreenViewModel @Inject constructor(
     private val _isFieldsValid: MutableState<Boolean> = mutableStateOf(false)
     val isFieldsValid: State<Boolean> = _isFieldsValid
 
-    val passwordVisibility: MutableState<Boolean> = mutableStateOf(false)
+    private val _passwordVisibility: MutableState<Boolean> = mutableStateOf(false)
+    val passwordVisibility: State<Boolean> = _passwordVisibility
+
     val showErrorDialog: MutableState<Boolean> = mutableStateOf(false)
 
     fun changeFormType() {
@@ -70,6 +72,10 @@ class AuthenticationScreenViewModel @Inject constructor(
 
     fun onAuthenticationAlertDialogDismiss() {
         showErrorDialog.value = false
+    }
+
+    fun onPasswordVisibilityChanged() {
+        _passwordVisibility.value = !_passwordVisibility.value
     }
 
     private fun changeEmailFieldValue(newValue: String) {

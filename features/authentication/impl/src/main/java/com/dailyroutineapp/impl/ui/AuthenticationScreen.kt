@@ -23,8 +23,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -63,12 +61,12 @@ fun AuthenticationScreen(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-    val showErrorDialogState = authenticationScreenViewModel.showErrorDialog.value
 
-    val isCreatingAccountState = authenticationScreenViewModel.isCreatingAccount
+    val showErrorDialogState = authenticationScreenViewModel.showErrorDialog.value
+    val isCreatingAccountState = authenticationScreenViewModel.isCreatingAccount.value
     val emailFieldState = authenticationScreenViewModel.emailFieldInput.value
     val passwordFieldState = authenticationScreenViewModel.passwordFieldInput.value
-    val passwordVisibility = authenticationScreenViewModel.passwordVisibility
+    val passwordVisibility = authenticationScreenViewModel.passwordVisibility.value
     val isFieldsValid = authenticationScreenViewModel.isFieldsValid.value
 
     Surface(
@@ -80,60 +78,45 @@ fun AuthenticationScreen(
             verticalArrangement = Arrangement.Top
         ) {
             DailyRoutineLogo(logoText = stringResource(id = R.string.app_name))
-            if (isCreatingAccountState.value) {
-                UserForm(
-                    emailState = emailFieldState,
-                    passwordState = passwordFieldState,
-                    isFieldsValid = isFieldsValid,
-                    isLoading = false,
-                    isCreateAccount = isCreatingAccountState.value,
-                    passwordVisibility = passwordVisibility,
-                    focusRequester = focusRequester,
-                    onValueChanged = { value, type ->
-                        authenticationScreenViewModel.changeInputFieldsValue(
-                            value = value,
-                            fieldType = type
-                        )
-                    },
-                    onDone = {
+            UserForm(
+                emailState = emailFieldState,
+                passwordState = passwordFieldState,
+                isFieldsValid = isFieldsValid,
+                isLoading = false,
+                isCreateAccount = isCreatingAccountState,
+                passwordVisibility = passwordVisibility,
+                focusRequester = focusRequester,
+                onValueChanged = { value, type ->
+                    authenticationScreenViewModel.changeInputFieldsValue(
+                        value = value,
+                        fieldType = type
+                    )
+                },
+                onDone = {
+                    if (isCreatingAccountState) {
                         authenticationScreenViewModel.authenticateUserWithEmailAndPassword(SINGUP) { authResult ->
                             if (authResult) {
                                 onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HOME))
                             }
                         }
-                    }
-                )
-            } else {
-                UserForm(
-                    emailState = emailFieldState,
-                    passwordState = passwordFieldState,
-                    isFieldsValid = isFieldsValid,
-                    isLoading = false,
-                    isCreateAccount = isCreatingAccountState.value,
-                    passwordVisibility = passwordVisibility,
-                    focusRequester = focusRequester,
-                    onValueChanged = { value, type ->
-                        authenticationScreenViewModel.changeInputFieldsValue(
-                            value = value,
-                            fieldType = type
-                        )
-                    },
-                    onDone = {
+                    } else {
                         authenticationScreenViewModel.authenticateUserWithEmailAndPassword(LOGIN) { authResult ->
                             if (authResult) {
                                 onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HOME))
                             }
                         }
                     }
-                )
-            }
+                },
+                onPasswordVisibilityChanged = {
+                    authenticationScreenViewModel.onPasswordVisibilityChanged()
+                }
+            )
         }
-        if (showErrorDialogState) {
-            AuthenticationAlertDialog(
-                isCreatingAccount = isCreatingAccountState.value
-            ) {
-                authenticationScreenViewModel.onAuthenticationAlertDialogDismiss()
-            }
+        AuthenticationErrorDialog(
+            showErrorDialogState,
+            isCreatingAccountState,
+        ) {
+            authenticationScreenViewModel.onAuthenticationAlertDialogDismiss()
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         Row(
@@ -142,13 +125,13 @@ fun AuthenticationScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            val isNewUserLabelText = if (isCreatingAccountState.value) {
+            val isNewUserLabelText = if (isCreatingAccountState) {
                 stringResource(R.string.authenticationScreen_alreadyHaveAnAccount_label)
             } else {
                 stringResource(R.string.authenticationScreen_newUser_label)
             }
 
-            val singUpLabelText = if (isCreatingAccountState.value) {
+            val singUpLabelText = if (isCreatingAccountState) {
                 stringResource(id = R.string.authenticationScreen_login_label)
             } else {
                 stringResource(R.string.authenticationScreen_singUp_label)
@@ -171,6 +154,19 @@ fun AuthenticationScreen(
     }
 }
 
+@Composable
+fun AuthenticationErrorDialog(
+    showErrorDialogState: Boolean,
+    isCreatingAccountState: Boolean,
+    onDialogConfirmButton:() -> Unit
+) {
+    if (showErrorDialogState) {
+        AuthenticationAlertDialog(
+            isCreatingAccount = isCreatingAccountState,
+            onDialogConfirmButton = onDialogConfirmButton
+        )
+    }
+}
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -180,9 +176,10 @@ fun UserForm(
     isFieldsValid: Boolean,
     isLoading: Boolean,
     isCreateAccount: Boolean,
-    passwordVisibility: MutableState<Boolean>,
+    passwordVisibility: Boolean,
     focusRequester: FocusRequester,
     onValueChanged: (String, FieldType) -> Unit,
+    onPasswordVisibilityChanged: () -> Unit,
     onDone: () -> Unit,
 ) {
 
@@ -216,6 +213,7 @@ fun UserForm(
             labelId = stringResource(R.string.authenticationScreen_password_label),
             enabled = !isLoading,
             passwordVisibility = passwordVisibility,
+            onPasswordVisibilityChanged = onPasswordVisibilityChanged,
             onAction = KeyboardActions {
                 if (isFieldsValid) {
                     onDone()
@@ -292,9 +290,7 @@ fun AuthenticationScreenPreview() {
 @Preview
 @Composable
 fun UserFormPreview() {
-    val isVisible = remember {
-        mutableStateOf(true)
-    }
+    val isVisible = true
     UserForm(
         emailState = "",
         passwordState = "",
@@ -305,6 +301,9 @@ fun UserFormPreview() {
 
         },
         onDone = {
+
+        },
+        onPasswordVisibilityChanged = {
 
         },
         isCreateAccount = true,

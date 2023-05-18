@@ -12,9 +12,10 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -75,11 +76,12 @@ fun PasswordInput(
     onValueChanged: (String, FieldType) -> Unit,
     labelId: String,
     enabled: Boolean = true,
-    passwordVisibility: MutableState<Boolean>,
+    passwordVisibility: Boolean,
+    onPasswordVisibilityChanged: () -> Unit,
     imeAction: ImeAction = ImeAction.Done,
     onAction: KeyboardActions = KeyboardActions.Default,
 ) {
-    val visualTransformation = if (passwordVisibility.value) {
+    val visualTransformation = if (passwordVisibility) {
         VisualTransformation.None
     } else {
         PasswordVisualTransformation()
@@ -106,16 +108,31 @@ fun PasswordInput(
             imeAction = imeAction
         ),
         visualTransformation = visualTransformation,
-        trailingIcon = { PasswordVisibility(passwordVisibility = passwordVisibility) },
+        trailingIcon = {
+            PasswordVisibility(
+                passwordVisibility = passwordVisibility,
+                onPasswordVisibilityChanged = onPasswordVisibilityChanged
+            )
+        },
         keyboardActions = onAction
     )
 }
 
 @Composable
-fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
-    val isPasswordVisible = passwordVisibility.value
-    IconButton(onClick = { passwordVisibility.value = !isPasswordVisible }) {
+fun PasswordVisibility(passwordVisibility: Boolean, onPasswordVisibilityChanged: () -> Unit) {
+    val passwordVisibilityIcon = if (passwordVisibility) {
         Icons.Default.Close
+    } else {
+        Icons.Default.Check
+    }
+    IconButton(
+        onClick = { onPasswordVisibilityChanged() },
+    ) {
+        Icon(
+            imageVector = passwordVisibilityIcon,
+            contentDescription = "",
+            tint = MaterialTheme.colors.onBackground
+        )
     }
 }
 
