@@ -52,11 +52,6 @@ dependencies {
     implementation Compose.material3
     implementation Compose.material3Compose
 
-    implementation platform(Google.firebase)
-    implementation Google.googleAnalytics
-    implementation Google.firebaseAuthentication
-    implementation Google.firebaseCloudStore
-
     kapt DaggerHilt.hiltCompiler
     implementation DaggerHilt.hiltAndroid
 

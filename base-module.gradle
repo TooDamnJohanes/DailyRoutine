@@ -37,11 +37,6 @@ dependencies {
     kapt DaggerHilt.hiltCompiler
     implementation DaggerHilt.hiltAndroid
 
-    implementation platform(Google.firebase)
-    implementation Google.googleAnalytics
-    implementation Google.firebaseAuthentication
-    implementation Google.firebaseCloudStore
-
     testImplementation Testing.junit4
     testImplementation Testing.junitAndroidExt
     testImplementation Testing.truth

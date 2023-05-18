@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "599176113924",
-    "project_id": "dailyroutine-c4f43",
-    "storage_bucket": "dailyroutine-c4f43.appspot.com"
+    "project_number": "1020743139678",
+    "project_id": "dailyroutineapk",
+    "storage_bucket": "dailyroutineapk.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:599176113924:android:3e056c9ffbfb8078d72a51",
+        "mobilesdk_app_id": "1:1020743139678:android:a893dc44a771589cee8fcf",
         "android_client_info": {
-          "package_name": "com.example.features.welcome.impl"
+          "package_name": "com.dailyroutineapp.features.welcome.impl"
         }
       },
       "oauth_client": [
         {
-          "client_id": "599176113924-9br3vm7m1dhmph58h2chv259gcbgi1e6.apps.googleusercontent.com",
+          "client_id": "1020743139678-n70as49s7qec80epbo4atprm4cvu4b8s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCV7VdV03btgnxQSarSLLKC1nVlmndus1k"
+          "current_key": "AIzaSyB4dslHYGHb2QTtnTHMmDIy3kSqfXjjkkI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "599176113924-9br3vm7m1dhmph58h2chv259gcbgi1e6.apps.googleusercontent.com",
+              "client_id": "1020743139678-n70as49s7qec80epbo4atprm4cvu4b8s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
