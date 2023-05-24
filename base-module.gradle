@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdk ProjectConfig.compileSdk
@@ -36,11 +35,6 @@ android {
 dependencies {
     kapt DaggerHilt.hiltCompiler
     implementation DaggerHilt.hiltAndroid
-
-    implementation platform(Google.firebase)
-    implementation Google.googleAnalytics
-    implementation Google.firebaseAuthentication
-    implementation Google.firebaseCloudStore
 
     testImplementation Testing.junit4
     testImplementation Testing.junitAndroidExt
