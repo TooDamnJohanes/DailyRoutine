@@ -70,16 +70,14 @@ fun AuthenticationScreen(
     val isFieldsValid = authenticationScreenViewModel.isFieldsValid.value
 
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             DailyRoutineLogo(logoText = stringResource(id = R.string.app_name))
-            UserForm(
-                emailState = emailFieldState,
+            UserForm(emailState = emailFieldState,
                 passwordState = passwordFieldState,
                 isFieldsValid = isFieldsValid,
                 isLoading = false,
@@ -88,8 +86,7 @@ fun AuthenticationScreen(
                 focusRequester = focusRequester,
                 onValueChanged = { value, type ->
                     authenticationScreenViewModel.changeInputFieldsValue(
-                        value = value,
-                        fieldType = type
+                        value = value, fieldType = type
                     )
                 },
                 onDone = {
@@ -109,8 +106,7 @@ fun AuthenticationScreen(
                 },
                 onPasswordVisibilityChanged = {
                     authenticationScreenViewModel.onPasswordVisibilityChanged()
-                }
-            )
+                })
         }
         AuthenticationErrorDialog(
             showErrorDialogState,
@@ -120,26 +116,13 @@ fun AuthenticationScreen(
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         Row(
-            modifier = Modifier
-                .padding(spacing.spaceMedium),
+            modifier = Modifier.padding(spacing.spaceMedium),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            val isNewUserLabelText = if (isCreatingAccountState) {
-                stringResource(R.string.authenticationScreen_alreadyHaveAnAccount_label)
-            } else {
-                stringResource(R.string.authenticationScreen_newUser_label)
-            }
-
-            val singUpLabelText = if (isCreatingAccountState) {
-                stringResource(id = R.string.authenticationScreen_login_label)
-            } else {
-                stringResource(R.string.authenticationScreen_singUp_label)
-            }
-
-            Text(text = isNewUserLabelText)
+            Text(text = IsNewUserLabelText(isCreatingAccountState))
             Text(
-                text = singUpLabelText,
+                text = SingUpLabelText(isCreatingAccountState),
                 modifier = Modifier
                     .padding(spacing.spaceExtraSmall)
                     .clickable {
@@ -158,7 +141,7 @@ fun AuthenticationScreen(
 fun AuthenticationErrorDialog(
     showErrorDialogState: Boolean,
     isCreatingAccountState: Boolean,
-    onDialogConfirmButton:() -> Unit
+    onDialogConfirmButton: () -> Unit
 ) {
     if (showErrorDialogState) {
         AuthenticationAlertDialog(
@@ -206,8 +189,7 @@ fun UserForm(
             enabled = !isLoading,
         )
 
-        PasswordInput(
-            modifier = Modifier.focusRequester(focusRequester),
+        PasswordInput(modifier = Modifier.focusRequester(focusRequester),
             passwordState = passwordState,
             onValueChanged = onValueChanged,
             labelId = stringResource(R.string.authenticationScreen_password_label),
@@ -221,30 +203,23 @@ fun UserForm(
                 } else {
                     return@KeyboardActions
                 }
-            }
-        )
+            })
 
-        SubmitButton(
-            textId = if (isCreateAccount) {
-                stringResource(R.string.authenticationScreen_createAccount_label)
-            } else {
-                stringResource(R.string.authenticationScreen_login_label)
-            },
-            isLoading = isLoading,
-            validInputs = isFieldsValid,
-            onClick = {
-                onDone()
-                keyboardController?.hide()
-            }
-        )
+        SubmitButton(textId = if (isCreateAccount) {
+            stringResource(R.string.authenticationScreen_createAccount_label)
+        } else {
+            stringResource(R.string.authenticationScreen_login_label)
+        }, isLoading = isLoading, validInputs = isFieldsValid, onClick = {
+            onDone()
+            keyboardController?.hide()
+        })
     }
 }
 
 @Composable
 private fun ShowCreateAccountText() {
     Text(
-        modifier = Modifier
-            .padding(start = LocalSpacing.current.spaceSmall),
+        modifier = Modifier.padding(start = LocalSpacing.current.spaceSmall),
         text = stringResource(id = R.string.authenticationScreen_createAccountInfo_label),
         fontWeight = FontWeight.SemiBold,
         style = TextStyle(
@@ -255,10 +230,7 @@ private fun ShowCreateAccountText() {
 
 @Composable
 fun SubmitButton(
-    textId: String,
-    isLoading: Boolean,
-    validInputs: Boolean,
-    onClick: () -> Unit
+    textId: String, isLoading: Boolean, validInputs: Boolean, onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -272,19 +244,34 @@ fun SubmitButton(
             CircularProgressIndicator()
         } else {
             Text(
-                text = textId,
-                modifier = Modifier.padding(LocalSpacing.current.spaceExtraSmall)
+                text = textId, modifier = Modifier.padding(LocalSpacing.current.spaceExtraSmall)
             )
         }
+    }
+}
+
+@Composable
+private fun IsNewUserLabelText(isCreatingAccount: Boolean): String {
+    return if (isCreatingAccount) {
+        stringResource(id = R.string.authenticationScreen_alreadyHaveAnAccount_label)
+    } else {
+        stringResource(id = R.string.authenticationScreen_newUser_label)
+    }
+}
+
+@Composable
+private fun SingUpLabelText(isCreatingAccount: Boolean): String {
+    return if (isCreatingAccount) {
+        stringResource(id = R.string.authenticationScreen_login_label)
+    } else {
+        stringResource(R.string.authenticationScreen_singUp_label)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AuthenticationScreenPreview() {
-    AuthenticationScreen(
-        onNavigate = { }
-    )
+    AuthenticationScreen(onNavigate = { })
 }
 
 @Preview
@@ -312,6 +299,5 @@ fun UserFormPreview() {
 }
 
 enum class FieldType {
-    EMAIL,
-    PASSWORD
+    EMAIL, PASSWORD
 }
