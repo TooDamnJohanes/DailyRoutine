@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Region Components -->
+
+    <!-- End Region -->
+
+    <!-- Region AuthenticationScreen -->
+
+    <!--- End Region -->
+
+    <!-- Region HabitsHomeScreen -->
+    <string name="habitsHomeScreen_floatingActionButton_contentDescription">Floating Action Button Habits Home Screen</string>
+    <string name="habitsHomeScreen_searchActionAppBar_contentDescription">Top App Bar Search Action Habits Home Screen</string>
+    <string name="habitsHomeScreen_closeSearchActionAppBar_contentDescription">Top App Bar Close Search Action Habits Home Screen</string>
+    <string name="habitsHomeScreen_sortActionAppBar_contentDescription">Top App Bar Sort Action Habits Home Screen</string>
+    <string name="habitsHomeScreen_deleteAllActionAppBar_contentDescription">Top App Bar Delete All Action Habits Home Screen</string>
+    <string name="habitsHomeScreen_emptyHomeScreen_contentDescription">Top App Bar Delete All Action Habits Home Screen</string>
+    <!-- End Region -->
+</resources>

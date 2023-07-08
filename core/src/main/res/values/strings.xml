@@ -19,5 +19,11 @@
     <string name="authenticationScreen_createAccount_label">Create account</string>
     <string name="authenticationScreen_login_label">Login</string>
     <string name="authenticationScreen_singUp_label">Sing up</string>
+    <!--- End Region -->
+
+    <!-- Region HabitsHomeScreen -->
+    <string name="habitsHomeScreen_deleteAll_label">Delete All</string>
+    <string name="coreComponents_search">Search</string>
+    <string name="coreComponents_noTaskFound">No Task Found</string>
     <!-- End Region -->
 </resources>

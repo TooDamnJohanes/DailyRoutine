@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.dailyroutineapp.core.R
 import com.dailyroutineapp.core.dimensions.LocalFontSize
 import com.dailyroutineapp.core.dimensions.LocalSpacing
-import com.dailyroutineapp.impl.ui.FieldType
+import com.dailyroutineapp.impl.ui.screens.FieldType
 
 @Composable
 fun DailyRoutineLogo(

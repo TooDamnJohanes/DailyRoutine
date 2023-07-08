@@ -1,4 +1,4 @@
-package com.dailyroutineapp.impl.ui
+package com.dailyroutineapp.impl.ui.viewmodels
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -11,6 +11,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.dailyroutineapp.apublic.domain.models.AuthenticationType.LOGIN
+import com.dailyroutineapp.apublic.domain.models.AuthenticationType.SINGUP
+import com.dailyroutineapp.impl.ui.screens.FieldType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,14 +56,13 @@ class AuthenticationScreenViewModel @Inject constructor(
     }
 
     fun authenticateUserWithEmailAndPassword(
-        authenticationType: AuthenticationType,
         onAuthenticationSucceed: (Boolean) -> Unit
     ) {
         viewModelScope.launch {
             val isLoginValidScope =
                 withContext(Dispatchers.IO) {
                     authenticateUserUseCase(
-                        authenticationType = authenticationType,
+                        authenticationType = typeOfAuthentication(),
                         email = _emailFieldInput.value,
                         password = _passwordFieldInput.value
                     )
@@ -100,6 +102,10 @@ class AuthenticationScreenViewModel @Inject constructor(
 
     private fun checkIfPasswordInputFieldIsValid(): Boolean {
         return _passwordFieldInput.value.isNotEmpty() && _passwordFieldInput.value.length >= PASSWORD_MIN_LENGTH
+    }
+
+    private fun typeOfAuthentication(): AuthenticationType {
+        return if (_isCreatingAccount.value) SINGUP else LOGIN
     }
     companion object {
         const val PASSWORD_MIN_LENGTH = 6

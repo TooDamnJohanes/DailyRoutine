@@ -1,6 +1,6 @@
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
-package com.dailyroutineapp.impl.ui
+package com.dailyroutineapp.impl.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,8 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.dailyroutineapp.apublic.domain.models.AuthenticationType.LOGIN
-import com.dailyroutineapp.apublic.domain.models.AuthenticationType.SINGUP
 import com.dailyroutineapp.core.R
 import com.dailyroutineapp.core.dimensions.LocalSpacing
 import com.dailyroutineapp.core.navigation.DailyRoutineScreens
@@ -47,6 +45,7 @@ import com.dailyroutineapp.impl.ui.components.AuthenticationAlertDialog
 import com.dailyroutineapp.impl.ui.components.DailyRoutineLogo
 import com.dailyroutineapp.impl.ui.components.EmailInput
 import com.dailyroutineapp.impl.ui.components.PasswordInput
+import com.dailyroutineapp.impl.ui.viewmodels.AuthenticationScreenViewModel
 
 @Composable
 fun AuthenticationScreen(
@@ -90,17 +89,9 @@ fun AuthenticationScreen(
                     )
                 },
                 onDone = {
-                    if (isCreatingAccountState) {
-                        authenticationScreenViewModel.authenticateUserWithEmailAndPassword(SINGUP) { authResult ->
-                            if (authResult) {
-                                onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HOME))
-                            }
-                        }
-                    } else {
-                        authenticationScreenViewModel.authenticateUserWithEmailAndPassword(LOGIN) { authResult ->
-                            if (authResult) {
-                                onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HOME))
-                            }
+                    authenticationScreenViewModel.authenticateUserWithEmailAndPassword { authResult ->
+                        if (authResult) {
+                            onNavigate(UiEvent.Navigate(DailyRoutineScreens.Route.HABITS_HOME))
                         }
                     }
                 },

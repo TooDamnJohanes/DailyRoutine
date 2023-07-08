@@ -11,6 +11,9 @@ enum class DailyRoutineScreens {
         const val WELCOME = "welcome"
         const val LOGIN = "login"
         const val SING_UP = "singUp"
-        const val HOME = "home"
+        const val HABITS_HOME = "habits_home"
+        const val HABITS_CREATION = "habits_creation"
+        const val HABITS_DETAIL = "habits_detail"
+        const val HABITS_FAVORITES = "habits_favorites"
     }
 }

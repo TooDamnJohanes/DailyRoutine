@@ -70,11 +70,6 @@ dependencies {
     implementation(DaggerHilt.hiltAndroid)
     kapt(DaggerHilt.hiltCompiler)
 
-    implementation(project(Modules.core))
-    implementation(project(Modules.welcome))
-    implementation(project(Modules.authentication))
-    implementation(project(Modules.authenticationImpl))
-
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.appCompat)
 
@@ -111,4 +106,13 @@ dependencies {
     androidTestImplementation(Testing.hiltTesting)
     kaptAndroidTest(DaggerHilt.hiltCompiler)
     androidTestImplementation(Testing.testRunner)
+
+    // region project modules
+    implementation(project(Modules.core))
+    implementation(project(Modules.welcome))
+    implementation(project(Modules.authentication))
+    implementation(project(Modules.authenticationImpl))
+    implementation(project(Modules.home))
+    implementation(project(Modules.homeImpl))
+    // endregion
 }
