@@ -12,17 +12,19 @@ import com.dailyroutineapp.domain.models.HomeScreenEditions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.compose.runtime.State
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.dailyroutineapp.core.models.Resource
+import com.dailyroutineapp.datastore.HomeLocalDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
 class HomeSharedViewModel @Inject constructor(
-    private val habitsRepository: HabitsRepository
+    private val habitsRepository: HabitsRepository,
+    private val habitsHomeLocalDataStore: HomeLocalDataStore
 ) : ViewModel() {
 
     private val _allHabit = MutableStateFlow<Resource<List<Habit>>>(Resource.Loading(isLoading = true))
@@ -176,7 +178,7 @@ class HomeSharedViewModel @Inject constructor(
 
     private fun handleGetAllHabits() {
         _allHabit.value = Resource.Loading(isLoading = true)
-        handleSortHabits(Priority.NONE)
+        handleSortHabits(getHabitsHomeScreenPriorityDataStore())
     }
 
     private fun setHabitListValue(habitsList: List<Habit>) {
@@ -202,6 +204,7 @@ class HomeSharedViewModel @Inject constructor(
 
     private fun handleSortHabits(priority: Priority) {
         viewModelScope.launch(Dispatchers.IO) {
+            habitsHomeLocalDataStore.savePreference(key = HABITS_SORT_ORDER_DATA_STORE, value = priority.name)
             habitsRepository.sortHabitsByPriority(priority).collect { sortedHabitsList ->
                 setHabitListValue(sortedHabitsList)
             }
@@ -263,6 +266,19 @@ class HomeSharedViewModel @Inject constructor(
         _expendedDeleteAllMenuDropDown.value = !_expendedDeleteAllMenuDropDown.value
     }
 
+    private fun getHabitsHomeScreenPriorityDataStore(): Priority {
+        var habitsSortSelection = ""
+        viewModelScope.launch {
+            habitsSortSelection = habitsHomeLocalDataStore.getPreference(HABITS_SORT_ORDER_DATA_STORE) ?: EMPTY_STRING
+        }
+        return when (habitsSortSelection) {
+            Priority.HIGH.name ->Priority.HIGH
+            Priority.MEDIUM.name -> Priority.MEDIUM
+            Priority.LOW.name -> Priority.LOW
+            else -> Priority.NONE
+        }
+    }
+
     private fun handleNoAction() {
 
     }
@@ -271,6 +287,8 @@ class HomeSharedViewModel @Inject constructor(
         const val EMPTY_STRING = ""
         const val ZERO_LONG = 0L
         const val ZERO_INT = 0
+        private const val HABITS_SORT_ORDER = "habits_sort_order"
+        val HABITS_SORT_ORDER_DATA_STORE = stringPreferencesKey(HABITS_SORT_ORDER)
     }
 
 }

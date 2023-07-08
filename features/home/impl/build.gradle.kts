@@ -5,4 +5,5 @@ apply {
 dependencies {
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.home))
+    "implementation"(AndroidX.dataStore)
 }
